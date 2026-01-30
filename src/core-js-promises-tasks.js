@@ -60,11 +60,9 @@ function getPromiseResult(source) {
  * [Promise.reject(1), Promise.reject(2), Promise.reject(3)]    => Promise rejected
  */
 function getFirstResolvedPromiseResult(promises) {
-  return (
-    Promise.allSettled(promises).then((results) =>
-      results.filter((result) => result.status === 'fulfilled')
-    )[0] ?? promises[0]
-  );
+  return Promise.any(promises).catch(() => {
+    return promises[0];
+  });
 }
 
 /**
